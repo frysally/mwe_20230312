@@ -10,4 +10,4 @@ infile.close()
 def bottom(x):
     return np.isclose(x[1], -0.5)
 
-bottom_facets = mesh.locate_entities_boundary(domain, domain.geometry.dim-1, bottom)
+bottom_facets = mesh.locate_entities_boundary(domain, domain.topology.dim-1, bottom)
