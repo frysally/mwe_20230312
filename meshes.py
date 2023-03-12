@@ -74,7 +74,7 @@ def generate_mesh_with_crack(Lx=1, Ly=1, Lcrack=0.3, lc=0.015, refinement_ratio=
                        partitioner=dolfinx.mesh.create_cell_partitioner(dolfinx.mesh.GhostMode.shared_facet))
 
     # Create a DOLFINx mesh (same mesh on each rank)
-    msh, cell_markers, facet_markers = gmshio.model_to_mesh(model, MPI.COMM_SELF, 0)
+    msh, cell_markers, facet_markers = gmshio.model_to_mesh(model, MPI.COMM_SELF, 0, gdim=2)
     msh.name = "notched_sample"
     cell_markers.name = f"{msh.name}_cells"
     facet_markers.name = f"{msh.name}_facets"
