@@ -64,14 +64,6 @@ def generate_mesh_with_crack(Lx=1, Ly=1, Lcrack=0.3, lc=0.015, refinement_ratio=
     model.addPhysicalGroup(2, surface_entities, tag = 5)
     model.setPhysicalName(2, 2, "Rectangle surface")
     model.mesh.generate(2)
-    # get mesh into fenics
-    x = extract_geometry(model, name = "Rectangle")[:,0:2]
-    gmsh_cell_id = model.mesh.getElementType("triangle", 1)
-    topologies = extract_topology_and_markers(model, "Rectangle")
-    cells = topologies[gmsh_cell_id]["topology"]
-    gmsh_facet_id = model.mesh.getElementType("triangle", 1)
-    mesh = create_mesh(MPI.COMM_WORLD, cells, x, ufl_mesh(gmsh_cell_id, 2), 
-                       partitioner=dolfinx.mesh.create_cell_partitioner(dolfinx.mesh.GhostMode.shared_facet))
 
     # Create a DOLFINx mesh (same mesh on each rank)
     msh, cell_markers, facet_markers = gmshio.model_to_mesh(model, MPI.COMM_SELF, 0, gdim=2)
@@ -84,8 +76,6 @@ def generate_mesh_with_crack(Lx=1, Ly=1, Lcrack=0.3, lc=0.015, refinement_ratio=
         file.write_meshtags(cell_markers)
         msh.topology.create_connectivity(msh.topology.dim - 1, msh.topology.dim)
         file.write_meshtags(facet_markers)
-
-    return mesh
 
 if __name__ == '__main__':
 
